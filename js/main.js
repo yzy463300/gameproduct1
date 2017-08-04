@@ -109,6 +109,7 @@ document.getElementById('container').appendChild(s.el);
 //     image : 'images/01.png'  
 // }).update();  
 // s.addChild(p); 
+console.log(123)
 create()
 function create(){
 	for (var i = 0; i < img.length; i++) {
