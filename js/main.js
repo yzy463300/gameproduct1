@@ -141,3 +141,53 @@ function create(){
         s.camera.move(0, 0, .9).updateT();
 
     })
+var hasTouchUp = false;
+var hasTouchDown = false;
+var tween = null;
+function finger(){
+	var ele = document.querySelector('#container');
+	new AlloyFinger(ele,{
+		touchMove:function(evt){
+				console.log('evt.deltaY: ' + evt.deltaY)
+			if (evt.deltaY !== 0) {
+				if (!hasTouchUp && evt.deltaY < 0) {//上滑
+					$('.tip').hide();
+					hasTouchDown = false;
+					hasTouchUp = true;
+					var timeLine = Math.abs(camera.position.z - 966)*500;
+					tween = new TWEEN.Tween({z : camera.position.z})
+					.to({z:966},timeLine)
+					.onUpdate(function(){
+						camera.position.z = this.z; 
+					})
+					.onComplete(function(){
+						tween = null;
+						console.log(1);
+					})
+					.start();
+				}else if (!hasTouchDown && evt.deltaY > 0) {//下滑
+					hasTouchDown = true;
+					hasTouchUp = false;
+					var timeLine = Math.abs(camera.position.z - 2)*500;
+					tween = new TWEEN.Tween({z : camera.position.z})
+					.to({z:2},timeLine)
+					.onUpdate(function(){
+						camera.position.z = this.z;
+					})
+					.onComplete(function(){
+						console.log('onComplete');
+						console.log(1)
+					})
+					.start();
+				}
+			}
+			$('.tip').hide();
+			// camera.position.z -= evt.deltaY/200;
+			
+		},
+		touchEnd:function(evt){
+			hasTouchDown = false;
+			hasTouchUp = false;
+		},
+	})
+}
